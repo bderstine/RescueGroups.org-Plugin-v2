@@ -49,6 +49,8 @@ function rg_options_page() {
 function register_rg_avail_key_settings() {
 	register_setting('rg_options_group', 'rg_token'); 
 	register_setting('rg_options_group', 'rg_tokenhash'); 
+        register_setting('rg_options_group', 'rg_account');
+        register_setting('rg_options_group', 'rg_username');
 } 
 
 add_action('admin_menu', 'rg_plugin_menu');
