@@ -10,14 +10,22 @@ License: GPL2
 */
 
 function rg_rescue() {
-        $args = array(
-            'headers' => array(
-                'Authorization' => 'Basic ' . base64_encode( YOUR_USERNAME . ':' . YOUR_PASSWORD )
-            )
-        );
-        $response = wp_remote_post( 'https://api.rescuegroups.org/http/', $args );
 
-        $output = "It worked! 
+	// normalize attribute keys, lowercase
+	$atts = array_change_key_case((array)$atts, CASE_LOWER);
+
+	// override default attributes with user attributes
+	$rg_atts = shortcode_atts([
+       		'species' => 'cats',
+		'status' => 'available',
+        ], $atts, $tag);
+
+        //$get_token_array = array('accountNumber' => $rg_account, 'username' => $rg_username, 'password' => $rg_password, 'action' => 'login');
+        //$result_array = rg_curl_api($get_token_array);
+ 
+        $output = '<h2>' . esc_html__($rg_atts['species']).'</h2>';
+        $output .= '<h2>' . esc_html__($rg_atts['status']).'</h2>';
+        $output .= "It worked! 
                 Provided by RescueGroups.org completely free of cost,
                 commitment, external links or advertisements
                 http://www.rescuegroups.org
@@ -115,6 +123,25 @@ function rg_settings_section_callback(  ) {
 }
 
 
+function rg_curl_api($array_data){
+        $url = "https://api.rescuegroups.org/http/";
+        $data_string = json_encode($array_data);
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($data_string))
+        );
+
+        $result = curl_exec($ch);
+        $result_array = json_decode($result, True);
+	return $result_array;
+}
+
+
 function rg_options_page(  ) { 
 
 	if(get_option('rg_token') == null){
@@ -123,21 +150,9 @@ function rg_options_page(  ) {
 		$rg_username = $options['rg_username'];
 	        $rg_password = $options['rg_password'];
 
-	        $url = "https://api.rescuegroups.org/http/";
 		$get_token_array = array('accountNumber' => $rg_account, 'username' => $rg_username, 'password' => $rg_password, 'action' => 'login');
-		$data_string = json_encode($get_token_array);                                                                                                             
+		$result_array = rg_curl_api($get_token_array);
 
-		$ch = curl_init($url);                                                                      
-		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");                                                                     
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);                                                                  
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);                                                                      
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
-		    'Content-Type: application/json',                                                                                
-		    'Content-Length: ' . strlen($data_string))                                                                       
-		);                                                                                                                   
-                                                                                                                     
-		$result = curl_exec($ch);
-		$result_array = json_decode($result, True);
                 if ($result_array['status'] == 'error'){
 			echo '<div class="notice notice-error"><p>'.$result_array['message'].'</p></div>';
 		} else {
