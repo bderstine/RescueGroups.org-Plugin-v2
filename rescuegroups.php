@@ -100,7 +100,7 @@ function rg_text_field_2_render(  ) {
 
         $options = get_option( 'rg_settings' );
         ?>
-        <input type='password' name='rg_settings[rg_password]' value='<?php echo $options['rg_password']; ?>'>
+        <input type='password' name='rg_settings[rg_password]'>
         <?php
 
 }
