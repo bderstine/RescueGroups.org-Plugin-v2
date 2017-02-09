@@ -9,32 +9,21 @@ Author URI: http://bizzartech.com
 License: GPL2
 */
 
-function rg_rescue() {
+function rg_rescue( $atts ) {
+    $atts = array_change_key_case((array)$atts, CASE_LOWER);
+    $atts = shortcode_atts(
+        array(
+            'species' => 'cats',
+            'status' => 'available',
+        ), $atts, 'rescue' );
 
-	// normalize attribute keys, lowercase
-	$atts = array_change_key_case((array)$atts, CASE_LOWER);
-
-	// override default attributes with user attributes
-	$rg_atts = shortcode_atts([
-       		'species' => 'cats',
-		'status' => 'available',
-        ], $atts, $tag);
-
-        //$get_token_array = array('accountNumber' => $rg_account, 'username' => $rg_username, 'password' => $rg_password, 'action' => 'login');
-        //$result_array = rg_curl_api($get_token_array);
+    //$json_array = array('accountNumber' => $rg_account, 'username' => $rg_username, 'password' => $rg_password, 'action' => 'login');
+    //$result_array = rg_curl_api($json_array);
  
-        $output = '<h2>' . esc_html__($rg_atts['species']).'</h2>';
-        $output .= '<h2>' . esc_html__($rg_atts['status']).'</h2>';
-        $output .= "It worked! 
-                Provided by RescueGroups.org completely free of cost,
-                commitment, external links or advertisements
-                http://www.rescuegroups.org
-                <!-- End Pet Adoption Toolkit -->";
-
-        return $output;
+    return 'rescue: ' . esc_html( $atts['species'] ) . ' ' . esc_html( $atts['status'] );
 }
 
-add_shortcode('rescue', 'rg_rescue');
+add_shortcode( 'rescue', 'rg_rescue' );
 
 #######################################################
 ## The following will add the admin menu and generate the options page
