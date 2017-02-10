@@ -13,6 +13,7 @@ License: GPL2
 //#petfocus_0=&resultSort_0=animalUpdatedDate&resultOrder_0=desc&page_0=1&searchString_0=lily&action_0=search&animalID=undefined
 
 function rg_rescue( $atts ) {
+
     $atts = array_change_key_case((array)$atts, CASE_LOWER);
     $atts = shortcode_atts(
         array(
@@ -21,16 +22,49 @@ function rg_rescue( $atts ) {
             'show' => 'all', //all, single, random
             'sort' => 'animalName', //animalName, animalUpdatedDate
             'order' => 'desc', //desc, asc
+            'display' => 'grid', //grid, list
         ), $atts, 'rescue' );
 
     //$json_array = array('accountNumber' => $rg_account, 'username' => $rg_username, 'password' => $rg_password, 'action' => 'login');
     //$result_array = rg_curl_api($json_array);
  
-    //return 'rescue: ' . esc_html( $atts['species'] ) . ' ' . esc_html( $atts['status'] );
     return 'rescue: '.$atts['species'].' '.$atts['status'].' '.$atts['show'].' '.$atts['sort'].' '.$atts['order'];
+
+}
+
+function rg_rescue_random( $atts ) {
+
+    $atts = array_change_key_case((array)$atts, CASE_LOWER);
+    $atts = shortcode_atts(
+        array(
+            'species' => 'cats', //cats, dogs, all
+            'status' => 'available', //available, adopted
+            'show' => 'random', //all, single, random
+        ), $atts, 'rescue_random' );
+
+    //$json_array = array('accountNumber' => $rg_account, 'username' => $rg_username, 'password' => $rg_password, 'action' => 'login');
+    //$result_array = rg_curl_api($json_array);
+
+    return 'rescue_random: '.$atts['species'].' '.$atts['status'].' '.$atts['show'];
+}
+
+function rg_rescue_single ( $atts ) {
+
+    $atts = array_change_key_case((array)$atts, CASE_LOWER);
+    $atts = shortcode_atts(
+        array(
+            'animalID' => '2472807', //cats, dogs, all
+        ), $atts, 'rescue_single' );
+
+    //$json_array = array('accountNumber' => $rg_account, 'username' => $rg_username, 'password' => $rg_password, 'action' => 'login');
+    //$result_array = rg_curl_api($json_array);
+    return 'rescue_single: '.' '.$atts['animalID'];
+
 }
 
 add_shortcode( 'rescue', 'rg_rescue' );
+add_shortcode( 'rescue_single', 'rg_rescue_single' );
+add_shortcode( 'rescue_random', 'rg_rescue_random' );
 
 #######################################################
 ## The following will add the admin menu and generate the options page
