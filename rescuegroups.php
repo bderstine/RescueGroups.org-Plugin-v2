@@ -9,18 +9,25 @@ Author URI: http://bizzartech.com
 License: GPL2
 */
 
+//THis is what they use with the search results...
+//#petfocus_0=&resultSort_0=animalUpdatedDate&resultOrder_0=desc&page_0=1&searchString_0=lily&action_0=search&animalID=undefined
+
 function rg_rescue( $atts ) {
     $atts = array_change_key_case((array)$atts, CASE_LOWER);
     $atts = shortcode_atts(
         array(
-            'species' => 'cats',
-            'status' => 'available',
+            'species' => 'cats', //cats, dogs, all
+            'status' => 'available', //available, adopted
+            'show' => 'all', //all, single, random
+            'sort' => 'animalName', //animalName, animalUpdatedDate
+            'order' => 'desc', //desc, asc
         ), $atts, 'rescue' );
 
     //$json_array = array('accountNumber' => $rg_account, 'username' => $rg_username, 'password' => $rg_password, 'action' => 'login');
     //$result_array = rg_curl_api($json_array);
  
-    return 'rescue: ' . esc_html( $atts['species'] ) . ' ' . esc_html( $atts['status'] );
+    //return 'rescue: ' . esc_html( $atts['species'] ) . ' ' . esc_html( $atts['status'] );
+    return 'rescue: '.$atts['species'].' '.$atts['status'].' '.$atts['show'].' '.$atts['sort'].' '.$atts['order'];
 }
 
 add_shortcode( 'rescue', 'rg_rescue' );
