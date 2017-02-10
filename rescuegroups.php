@@ -58,6 +58,7 @@ function rg_rescue_single ( $atts ) {
 
     //$json_array = array('accountNumber' => $rg_account, 'username' => $rg_username, 'password' => $rg_password, 'action' => 'login');
     //$result_array = rg_curl_api($json_array);
+
     return 'rescue_single: '.' '.$atts['animalID'];
 
 }
@@ -208,6 +209,8 @@ function rg_options_page(  ) {
 		?>
 
 	</form>
+        <hr/>
+	<a href='https://github.com/bderstine/RescueGroups.org-Plugin-v2/issues' target='_blank'>Click here</a> to report any issues or problems you have with the plugin!
 	<?php
 
 }
