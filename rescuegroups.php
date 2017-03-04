@@ -39,13 +39,12 @@ function rg_rescue_random( $atts ) {
         array(
             'species' => 'cats', //cats, dogs, all
             'status' => 'available', //available, adopted
-            'show' => 'random', //all, single, random
         ), $atts, 'rescue_random' );
 
     //$json_array = array('accountNumber' => $rg_account, 'username' => $rg_username, 'password' => $rg_password, 'action' => 'login');
     //$result_array = rg_curl_api($json_array);
 
-    return 'rescue_random: '.$atts['species'].' '.$atts['status'].' '.$atts['show'];
+    return 'rescue_random: '.$atts['species'].' '.$atts['status'];
 }
 
 function rg_rescue_single ( $atts ) {
