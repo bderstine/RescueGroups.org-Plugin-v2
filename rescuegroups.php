@@ -9,7 +9,7 @@ Author URI: http://bizzartech.com
 License: GPL2
 */
 
-//THis is what they use with the search results...
+//This is what they use with the search results...
 //#petfocus_0=&resultSort_0=animalUpdatedDate&resultOrder_0=desc&page_0=1&searchString_0=lily&action_0=search&animalID=undefined
 
 function rg_rescue( $atts ) {
