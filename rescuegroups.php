@@ -17,48 +17,24 @@ function rg_rescue( $atts ) {
     $atts = array_change_key_case((array)$atts, CASE_LOWER);
     $atts = shortcode_atts(
         array(
+            'show' => 'all', //all, random, single
             'species' => 'cats', //cats, dogs, all
             'status' => 'available', //available, adopted
             'sort' => 'animalName', //animalName, animalUpdatedDate
             'order' => 'desc', //desc, asc
             'display' => 'grid', //grid, list
+            'animalID' => '0',
         ), $atts, 'rescue' );
 
-    $output = 'rescue: '.$atts['species'].' '.$atts['status'].' '.$atts['sort'].' '.$atts['order'].' '.$atts['display'];
-
-    //$json_array = array('accountNumber' => $rg_account, 'username' => $rg_username, 'password' => $rg_password, 'action' => 'login');
-    //$result_array = rg_curl_api($json_array);
-
-    return $output; 
-
-}
-
-function rg_rescue_random( $atts ) {
-
-    $atts = array_change_key_case((array)$atts, CASE_LOWER);
-    $atts = shortcode_atts(
-        array(
-            'species' => 'cats', //cats, dogs, all
-            'status' => 'available', //available, adopted
-        ), $atts, 'rescue_random' );
-
-    $output = 'rescue_random: '.$atts['species'].' '.$atts['status'];
-
-    //$json_array = array('accountNumber' => $rg_account, 'username' => $rg_username, 'password' => $rg_password, 'action' => 'login');
-    //$result_array = rg_curl_api($json_array);
-
-    return $output; 
-}
-
-function rg_rescue_single ( $atts ) {
-
-    $atts = array_change_key_case((array)$atts, CASE_LOWER);
-    $atts = shortcode_atts(
-        array(
-            'animalID' => '2472807', //cats, dogs, all
-        ), $atts, 'rescue_single' );
-
-    $output = 'rescue_single: '.' '.$atts['animalID'];
+    if($atts['show'] == 'single'){
+      $output = 'rescue: '.$atts['show'].' '.$atts['animalID'];
+    }
+    else if ($atts['show']=='random'){
+      $output = 'rescue: '.$atts['show'].' '.$atts['species'].' '.$atts['status'].' '.$atts['sort'].' '.$atts['order'].' '.$atts['display'];
+    }
+    else{
+      $output = 'rescue: '.$atts['show'].' '.$atts['species'].' '.$atts['status'].' '.$atts['sort'].' '.$atts['order'].' '.$atts['display'];
+    }
 
     //$json_array = array('accountNumber' => $rg_account, 'username' => $rg_username, 'password' => $rg_password, 'action' => 'login');
     //$result_array = rg_curl_api($json_array);
@@ -68,8 +44,6 @@ function rg_rescue_single ( $atts ) {
 }
 
 add_shortcode( 'rescue', 'rg_rescue' );
-add_shortcode( 'rescue_single', 'rg_rescue_single' );
-add_shortcode( 'rescue_random', 'rg_rescue_random' );
 
 #######################################################
 ## The following will add the admin menu and generate the options page
