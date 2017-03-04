@@ -30,24 +30,28 @@ function rg_rescue( $atts ) {
     if(isset($_GET['id'])){
       $output = 'animalid: '.$_GET['id'];
       $output.= '<br/>'.$atts['fields'];
+      return $output;
     }
     elseif(isset($_GET['search'])){
       $output = 'search results: '.$_GET['search'];
       $output.= '<br/>'.$atts['fields'];
+      return $output;
     }
     elseif($atts['show'] == 'single'){
       $output = 'rescue: '.$atts['show'].' '.$atts['animalid'];
       $output.= '<br/>'.$atts['fields'];
+      return $output;
     }
     elseif ($atts['show']=='random'){
       $output = 'rescue: '.$atts['show'].' '.$atts['species'].' '.$atts['status'].' '.$atts['sort'].' '.$atts['order'].' '.$atts['display'];
       $output.= '<br/>'.$atts['fields'];
+      return $output;
     }
-    else{
-      $output = 'rescue: '.$atts['show'].' '.$atts['species'].' '.$atts['status'].' '.$atts['sort'].' '.$atts['order'].' '.$atts['display'];
-      $output.= '<br/>'.$atts['fields'];
-    }
-    $output.= '<br/><br/>';
+    //else{
+    //  $output = 'rescue: '.$atts['show'].' '.$atts['species'].' '.$atts['status'].' '.$atts['sort'].' '.$atts['order'].' '.$atts['display'];
+    //  $output.= '<br/>'.$atts['fields'];
+    //}
+    //$output.= '<br/><br/>';
 
     $search_json = '{
       "token": "'.get_option(rg_token).'",
@@ -75,15 +79,8 @@ function rg_rescue( $atts ) {
     $json_array = json_decode($search_json);
     $result_array = rg_curl_api($json_array);
 
-    //$result_json = json_encode($result_array);
-    //$output.= '<pre><code>'.$result_json.'</code></pre>';
-
     $output.= '<div class="row">';
     foreach($result_array['data'] as $k => $v){
-        //$output.= '<br/>'.$v['animalName'];
-        //$output.= '<br/>'.$v['animalBreed'];
-        //$output.= '<br/><img src="'.$v['animalPictures'][0]['original']['url'].'" width="100px">';
-
         $output.= '<div class="rg-entry" style="float: left; height: 350px; width: 200px; text-align: center;">';
         $output.= '  <div class="rg-thumbnail">';
         $output.= '    <a href="'.$_SERVER['REQUEST_URI'].'/?id='.$v['animalID'].'">';
