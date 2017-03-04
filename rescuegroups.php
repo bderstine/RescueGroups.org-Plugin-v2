@@ -13,6 +13,7 @@ License: GPL2
 //#petfocus_0=&resultSort_0=animalUpdatedDate&resultOrder_0=desc&page_0=1&searchString_0=lily&action_0=search&animalID=undefined
 
 function rg_rescue( $atts ) {
+    $search_json = '';
 
     $atts = array_change_key_case((array)$atts, CASE_LOWER);
     $atts = shortcode_atts(
@@ -47,22 +48,17 @@ function rg_rescue( $atts ) {
       $output.= '<br/>'.$atts['fields'];
       return $output;
     }
-    //else{
-    //  $output = 'rescue: '.$atts['show'].' '.$atts['species'].' '.$atts['status'].' '.$atts['sort'].' '.$atts['order'].' '.$atts['display'];
-    //  $output.= '<br/>'.$atts['fields'];
-    //}
-    //$output.= '<br/><br/>';
-
-    $search_json = '{
-      "token": "'.get_option(rg_token).'",
-      "tokenHash": "'.get_option(rg_tokenhash).'",
-      "objectType": "animals",
-      "objectAction": "search",
-      "search": {
-        "resultStart": 0,
-        "resultLimit": 100,
-        "resultSort": "'.$atts['sort'].'",
-        "filters": [{
+    else{
+      $search_json = '{
+        "token": "'.get_option(rg_token).'",
+        "tokenHash": "'.get_option(rg_tokenhash).'",
+        "objectType": "animals",
+        "objectAction": "search",
+        "search": {
+          "resultStart": 0,
+          "resultLimit": 100,
+          "resultSort": "'.$atts['sort'].'",
+          "filters": [{
             "fieldName": "animalSpecies",
             "operation": "equal",
             "criteria": "'.$atts['species'].'"
@@ -72,37 +68,42 @@ function rg_rescue( $atts ) {
             "operation": "equal",
             "criteria": "'.$atts['status'].'"
           }],
-        "fields": '.$atts['fields'].'
-      }
-    }';
-
-    $json_array = json_decode($search_json);
-    $result_array = rg_curl_api($json_array);
-
-    $output.= '<div class="row">';
-    foreach($result_array['data'] as $k => $v){
-        $output.= '<div class="rg-entry" style="float: left; height: 350px; width: 200px; text-align: center;">';
-        $output.= '  <div class="rg-thumbnail">';
-        $output.= '    <a href="'.$_SERVER['REQUEST_URI'].'/?id='.$v['animalID'].'">';
-        $output.= '      <img src="'.$v['animalPictures'][0]['original']['url'].'" alt="" width="100px">';
-        $output.= '    </a>';
-        $output.= '    <div class="rg-info">';
-        $output.= '      <div>'.$v['animalName'].'</div>';
-        $output.= '      <div>'.$v['animalBreed'].'</div>';
-        $output.= '    </div>';
-        $output.= '  </div>';
-        $output.= '  <div style="clear:both;"></div>';
-        $output.= '</div>';
-        
+          "fields": '.$atts['fields'].'
+        }
+      }';
     }
-    $output.= '</div><!-- End row -->';
+
+    if(isset($_GET['id'])){
+      $output.= 'Add display for single pet with more information and fields!';
+
+    } else {
+      $json_array = json_decode($search_json);
+      $result_array = rg_curl_api($json_array);
+
+      $output.= '<div class="row">';
+      foreach($result_array['data'] as $k => $v){
+          $output.= '<div class="rg-entry" style="float: left; text-align: center;">';
+          $output.= '  <div class="rg-thumbnail">';
+          $output.= '    <a href="'.$_SERVER['REQUEST_URI'].'/?id='.$v['animalID'].'">';
+          $output.= '      <img src="'.$v['animalPictures'][0]['original']['url'].'" alt="" width="50%">';
+          $output.= '    </a>';
+          $output.= '  </div>';
+          $output.= '  <div class="rg-info">';
+          $output.= '    <div>'.$v['animalName'].'</div>';
+          $output.= '    <div>'.$v['animalBreed'].'</div>';
+          $output.= '  </div>';
+          $output.= '  <div style="clear:both;"></div>';
+          $output.= '</div>';
+      }
+      $output.= '</div><!-- End row -->';
+    }
 
     return $output; 
 
 }
 
 function rg_rescue_search( $atts ) {
-    $output = "<form method='get' action='".$_SERVER['REQUEST_URI']."'><input type='text' name='search'><input type='submit' value='Search'></form>";
+    $output = "<form method='get' action='".$_SERVER['REQUEST_URI']."'><input type='text' name='search' value='".$_GET['search']."'><input type='submit' value='Search'></form>";
     return $output;
 }
 
