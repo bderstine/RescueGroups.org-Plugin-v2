@@ -197,7 +197,6 @@ function rg_options_page(  ) {
 		<h2>RescueGroups.org Plugin v2</h2>
 
         	Token: <?php echo get_option('rg_token'); ?><br/>
-	        TokenHash: <?php echo get_option('rg_tokenhash'); ?><br/><br/>
 
 		Use a non-admin, volunteer level account below to generate a secure token and tokenhash.
 
