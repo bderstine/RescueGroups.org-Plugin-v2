@@ -18,12 +18,12 @@ function rg_rescue( $atts ) {
     $atts = shortcode_atts(
         array(
             'show' => 'all', //all, random, single
-            'species' => 'cats', //cats, dogs, all
+            'species' => 'cat', //cats, dogs, all
             'status' => 'available', //available, adopted
             'sort' => 'animalName', //animalName, animalUpdatedDate
             'order' => 'desc', //desc, asc
             'display' => 'grid', //grid, list
-            'fields' => 'photo, animalName, animalBreed, animalGender, animalAge',
+            'fields' => '["animalID", "animalName", "animalSpecies", "animalBreed", "animalPictures"]',
             'animalid' => '0',
         ), $atts, 'rescue' );
 
@@ -31,15 +31,15 @@ function rg_rescue( $atts ) {
       $output = 'animalid: '.$_GET['id'];
       $output.= '<br/>'.$atts['fields'];
     }
-    else if(isset($_GET['search'])){
+    elseif(isset($_GET['search'])){
       $output = 'search results: '.$_GET['search'];
       $output.= '<br/>'.$atts['fields'];
     }
-    else if($atts['show'] == 'single'){
+    elseif($atts['show'] == 'single'){
       $output = 'rescue: '.$atts['show'].' '.$atts['animalid'];
       $output.= '<br/>'.$atts['fields'];
     }
-    else if ($atts['show']=='random'){
+    elseif ($atts['show']=='random'){
       $output = 'rescue: '.$atts['show'].' '.$atts['species'].' '.$atts['status'].' '.$atts['sort'].' '.$atts['order'].' '.$atts['display'];
       $output.= '<br/>'.$atts['fields'];
     }
@@ -47,11 +47,7 @@ function rg_rescue( $atts ) {
       $output = 'rescue: '.$atts['show'].' '.$atts['species'].' '.$atts['status'].' '.$atts['sort'].' '.$atts['order'].' '.$atts['display'];
       $output.= '<br/>'.$atts['fields'];
     }
-
-    $output.= '<br/>'.get_option(rg_token).' '.get_option(rg_tokenhash);
-
-    //$json_array = array('accountNumber' => $rg_account, 'username' => $rg_username, 'password' => $rg_password, 'action' => 'login');
-    //$json_array = array('token' => get_options(rg_token), 'tokenHash' => get_option(rg_tokenhash), 'objectType' => 'animals', 'objectAction' => 'search');
+    $output.= '<br/><br/>';
 
     $search_json = '{
       "token": "'.get_option(rg_token).'",
@@ -61,69 +57,48 @@ function rg_rescue( $atts ) {
       "search": {
         "resultStart": 0,
         "resultLimit": 100,
-        "resultSort": "animalName",
+        "resultSort": "'.$atts['sort'].'",
         "filters": [{
             "fieldName": "animalSpecies",
             "operation": "equal",
-            "criteria": "cat"
+            "criteria": "'.$atts['species'].'"
           },
           {
             "fieldName": "animalStatus",
             "operation": "equal",
-            "criteria": "Available"
+            "criteria": "'.$atts['status'].'"
           }],
-        "fields": ["animalID", "animalName", "animalSpecies"]
+        "fields": '.$atts['fields'].'
       }
     }';
 
     $json_array = json_decode($search_json);
     $result_array = rg_curl_api($json_array);
 
-    //$output.= '<br/>'.count(result_array);
-/*
-    $output.= '<br/>';
+    //$result_json = json_encode($result_array);
+    //$output.= '<pre><code>'.$result_json.'</code></pre>';
 
-    $output.= implode(', ', array_map(
-        function ($v, $k) { return sprintf("%s='%s'", $k, $v); },
-        $result_array,
-        array_keys($result_array)
-    ));
-
-    $output.= implode(', ', array_map(
-        function ($v, $k) { return sprintf("%s='%s'", $k, $v); },
-        $result_array['data'],
-        array_keys($result_array['data'])
-    ));
-*/
-
+    $output.= '<div class="row">';
     foreach($result_array['data'] as $k => $v){
-        $output.= '<br/>'.$k.': '.$v;
-        foreach ($v as $k2 => $v2){
-            $output.= '<br/>'.$k2.': '.$v2;
-        }
+        //$output.= '<br/>'.$v['animalName'];
+        //$output.= '<br/>'.$v['animalBreed'];
+        //$output.= '<br/><img src="'.$v['animalPictures'][0]['original']['url'].'" width="100px">';
+
+        $output.= '<div class="rg-entry" style="float: left; height: 350px; width: 200px; text-align: center;">';
+        $output.= '  <div class="rg-thumbnail">';
+        $output.= '    <a href="'.$_SERVER['REQUEST_URI'].'/?id='.$v['animalID'].'">';
+        $output.= '      <img src="'.$v['animalPictures'][0]['original']['url'].'" alt="" width="100px">';
+        $output.= '    </a>';
+        $output.= '    <div class="rg-info">';
+        $output.= '      <div>'.$v['animalName'].'</div>';
+        $output.= '      <div>'.$v['animalBreed'].'</div>';
+        $output.= '    </div>';
+        $output.= '  </div>';
+        $output.= '  <div style="clear:both;"></div>';
+        $output.= '</div>';
+        
     }
-
-/*
-    #output = '';
-
-      <div class="row">
-       {% for i in igData %}
-        <div class="col-xs-18 col-sm-6 col-md-3">
-
-          <div class="thumbnail">
-            <a href="{{ i.image_url }}" class="swipebox">
-              <img src="{{ i.image_url }}" alt="">
-            </a>
-            <div class="caption">
-              <p>{{ process_hashtags(i.caption)|safe }}</p>
-              <p><a href="{{ i.link }}" target="_blank" class="btn btn-default btn-xs" role="button">Link</a></p>
-            </div>
-          </div>
-        </div>
-        {% endfor %}
-
-      </div><!-- End row -->
-*/
+    $output.= '</div><!-- End row -->';
 
     return $output; 
 
