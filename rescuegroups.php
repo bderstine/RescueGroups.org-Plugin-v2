@@ -23,11 +23,11 @@ function rg_rescue( $atts ) {
             'sort' => 'animalName', //animalName, animalUpdatedDate
             'order' => 'desc', //desc, asc
             'display' => 'grid', //grid, list
-            'animalID' => '0',
+            'animalid' => '0',
         ), $atts, 'rescue' );
 
     if($atts['show'] == 'single'){
-      $output = 'rescue: '.$atts['show'].' '.$atts['animalID'];
+      $output = 'rescue: '.$atts['show'].' '.$atts['animalid'];
     }
     else if ($atts['show']=='random'){
       $output = 'rescue: '.$atts['show'].' '.$atts['species'].' '.$atts['status'].' '.$atts['sort'].' '.$atts['order'].' '.$atts['display'];
