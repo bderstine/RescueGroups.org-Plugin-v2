@@ -23,10 +23,19 @@ function rg_rescue( $atts ) {
             'sort' => 'animalName', //animalName, animalUpdatedDate
             'order' => 'desc', //desc, asc
             'display' => 'grid', //grid, list
+            'fields' => 'photo, animalName, animalBreed, animalGender, animalAge',
             'animalid' => '0',
         ), $atts, 'rescue' );
 
-    if($atts['show'] == 'single'){
+    if(isset($_GET['id'])){
+      $output = 'animalid: '.$_GET['id'];
+      $output.= '<br/>'.$atts['fields'];
+    }
+    else if(isset($_GET['search'])){
+      $output = 'search results: '.$_GET['search'];
+      $output.= '<br/>'.$atts['fields'];
+    }
+    else if($atts['show'] == 'single'){
       $output = 'rescue: '.$atts['show'].' '.$atts['animalid'];
     }
     else if ($atts['show']=='random'){
