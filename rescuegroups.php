@@ -53,6 +53,28 @@ function rg_rescue( $atts ) {
     //$json_array = array('accountNumber' => $rg_account, 'username' => $rg_username, 'password' => $rg_password, 'action' => 'login');
     //$result_array = rg_curl_api($json_array);
 
+/*
+    #output = '';
+
+      <div class="row">
+       {% for i in igData %}
+        <div class="col-xs-18 col-sm-6 col-md-3">
+
+          <div class="thumbnail">
+            <a href="{{ i.image_url }}" class="swipebox">
+              <img src="{{ i.image_url }}" alt="">
+            </a>
+            <div class="caption">
+              <p>{{ process_hashtags(i.caption)|safe }}</p>
+              <p><a href="{{ i.link }}" target="_blank" class="btn btn-default btn-xs" role="button">Link</a></p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+
+      </div><!-- End row -->
+*/
+
     return $output; 
 
 }
