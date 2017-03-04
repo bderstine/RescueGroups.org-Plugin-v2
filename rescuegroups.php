@@ -52,7 +52,13 @@ function rg_rescue( $atts ) {
 
 }
 
+function rg_rescue_search( $atts ) {
+    $output = "<form method='get' action='".$_SERVER['REQUEST_URI']."'><input type='text' name='search'><input type='submit' value='Search'></form>";
+    return $output;
+}
+
 add_shortcode( 'rescue', 'rg_rescue' );
+add_shortcode( 'rescue-search', 'rg_rescue_search' );
 
 #######################################################
 ## The following will add the admin menu and generate the options page
