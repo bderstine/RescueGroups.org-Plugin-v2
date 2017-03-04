@@ -37,13 +37,18 @@ function rg_rescue( $atts ) {
     }
     else if($atts['show'] == 'single'){
       $output = 'rescue: '.$atts['show'].' '.$atts['animalid'];
+      $output.= '<br/>'.$atts['fields'];
     }
     else if ($atts['show']=='random'){
       $output = 'rescue: '.$atts['show'].' '.$atts['species'].' '.$atts['status'].' '.$atts['sort'].' '.$atts['order'].' '.$atts['display'];
+      $output.= '<br/>'.$atts['fields'];
     }
     else{
       $output = 'rescue: '.$atts['show'].' '.$atts['species'].' '.$atts['status'].' '.$atts['sort'].' '.$atts['order'].' '.$atts['display'];
+      $output.= '<br/>'.$atts['fields'];
     }
+
+    $output.= '<br/>'.get_option(rg_token).' '.get_option(rg_tokenhash);
 
     //$json_array = array('accountNumber' => $rg_account, 'username' => $rg_username, 'password' => $rg_password, 'action' => 'login');
     //$result_array = rg_curl_api($json_array);
