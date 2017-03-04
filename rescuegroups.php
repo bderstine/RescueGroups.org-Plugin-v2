@@ -19,16 +19,17 @@ function rg_rescue( $atts ) {
         array(
             'species' => 'cats', //cats, dogs, all
             'status' => 'available', //available, adopted
-            'show' => 'all', //all, single, random
             'sort' => 'animalName', //animalName, animalUpdatedDate
             'order' => 'desc', //desc, asc
             'display' => 'grid', //grid, list
         ), $atts, 'rescue' );
 
+    $output = 'rescue: '.$atts['species'].' '.$atts['status'].' '.$atts['sort'].' '.$atts['order'].' '.$atts['display'];
+
     //$json_array = array('accountNumber' => $rg_account, 'username' => $rg_username, 'password' => $rg_password, 'action' => 'login');
     //$result_array = rg_curl_api($json_array);
- 
-    return 'rescue: '.$atts['species'].' '.$atts['status'].' '.$atts['show'].' '.$atts['sort'].' '.$atts['order'];
+
+    return $output; 
 
 }
 
@@ -41,10 +42,12 @@ function rg_rescue_random( $atts ) {
             'status' => 'available', //available, adopted
         ), $atts, 'rescue_random' );
 
+    $output = 'rescue_random: '.$atts['species'].' '.$atts['status'];
+
     //$json_array = array('accountNumber' => $rg_account, 'username' => $rg_username, 'password' => $rg_password, 'action' => 'login');
     //$result_array = rg_curl_api($json_array);
 
-    return 'rescue_random: '.$atts['species'].' '.$atts['status'];
+    return $output; 
 }
 
 function rg_rescue_single ( $atts ) {
@@ -55,10 +58,12 @@ function rg_rescue_single ( $atts ) {
             'animalID' => '2472807', //cats, dogs, all
         ), $atts, 'rescue_single' );
 
+    $output = 'rescue_single: '.' '.$atts['animalID'];
+
     //$json_array = array('accountNumber' => $rg_account, 'username' => $rg_username, 'password' => $rg_password, 'action' => 'login');
     //$result_array = rg_curl_api($json_array);
 
-    return 'rescue_single: '.' '.$atts['animalID'];
+    return $output; 
 
 }
 
