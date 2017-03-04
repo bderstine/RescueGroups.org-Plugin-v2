@@ -51,7 +51,57 @@ function rg_rescue( $atts ) {
     $output.= '<br/>'.get_option(rg_token).' '.get_option(rg_tokenhash);
 
     //$json_array = array('accountNumber' => $rg_account, 'username' => $rg_username, 'password' => $rg_password, 'action' => 'login');
-    //$result_array = rg_curl_api($json_array);
+    //$json_array = array('token' => get_options(rg_token), 'tokenHash' => get_option(rg_tokenhash), 'objectType' => 'animals', 'objectAction' => 'search');
+
+    $search_json = '{
+      "token": "'.get_option(rg_token).'",
+      "tokenHash": "'.get_option(rg_tokenhash).'",
+      "objectType": "animals",
+      "objectAction": "search",
+      "search": {
+        "resultStart": 0,
+        "resultLimit": 100,
+        "resultSort": "animalName",
+        "filters": [{
+            "fieldName": "animalSpecies",
+            "operation": "equal",
+            "criteria": "cat"
+          },
+          {
+            "fieldName": "animalStatus",
+            "operation": "equal",
+            "criteria": "Available"
+          }],
+        "fields": ["animalID", "animalName", "animalSpecies"]
+      }
+    }';
+
+    $json_array = json_decode($search_json);
+    $result_array = rg_curl_api($json_array);
+
+    //$output.= '<br/>'.count(result_array);
+/*
+    $output.= '<br/>';
+
+    $output.= implode(', ', array_map(
+        function ($v, $k) { return sprintf("%s='%s'", $k, $v); },
+        $result_array,
+        array_keys($result_array)
+    ));
+
+    $output.= implode(', ', array_map(
+        function ($v, $k) { return sprintf("%s='%s'", $k, $v); },
+        $result_array['data'],
+        array_keys($result_array['data'])
+    ));
+*/
+
+    foreach($result_array['data'] as $k => $v){
+        $output.= '<br/>'.$k.': '.$v;
+        foreach ($v as $k2 => $v2){
+            $output.= '<br/>'.$k2.': '.$v2;
+        }
+    }
 
 /*
     #output = '';
